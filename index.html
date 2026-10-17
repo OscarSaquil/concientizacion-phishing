@@ -3,200 +3,295 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>¡Caíste! · Concientización sobre Phishing</title>
-<meta name="description" content="Acabas de participar en un ejercicio de concientización sobre phishing. Aprende a reconocer y reportar correos y enlaces maliciosos." />
+<title>¡Caíste! · Concientización sobre Phishing · UMG</title>
+<meta name="description" content="Ejercicio de concientización sobre phishing de la Universidad Mariano Gálvez de Guatemala. Aprende a reconocer, evitar y reportar correos y enlaces maliciosos." />
+<meta name="theme-color" content="#0b1020" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root{
     --bg:#0b1020; --bg-soft:#121934; --card:#161e40; --line:#283163;
     --text:#eaeefb; --muted:#9aa6d4; --brand:#ffcc3f; --brand-ink:#2a2200;
     --good:#34d399; --bad:#fb7185; --accent:#7c9bff;
-    --radius:18px; --maxw:960px;
+    --umg-red:#c8202f; --umg-gold:#b48a3c; --umg-blue:#2d7cc0;
+    --radius:18px; --maxw:1040px;
   }
   @media (prefers-color-scheme: light){
     :root:not([data-theme="dark"]){
       --bg:#f6f7fc; --bg-soft:#ffffff; --card:#ffffff; --line:#e4e8f5;
-      --text:#141a33; --muted:#5b6690; --brand:#f2b600; --brand-ink:#2a2200;
-      --accent:#3a5bd0;
+      --text:#141a33; --muted:#5b6690; --brand:#e0a900; --accent:#3a5bd0;
     }
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{
-    margin:0; background:var(--bg); color:var(--text);
-    font-family:Inter,system-ui,sans-serif; line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px}
-  h1,h2,h3{font-family:Fraunces,Georgia,serif; line-height:1.1; margin:0}
+  body{margin:0; background:var(--bg); color:var(--text);
+    font-family:Inter,system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased}
+  img{max-width:100%; display:block}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(16px,4vw,28px)}
+  h1,h2,h3{font-family:Fraunces,Georgia,serif; line-height:1.08; margin:0}
+  a{color:var(--accent)}
 
-  /* HERO */
-  .hero{
-    min-height:100svh; display:grid; place-items:center; text-align:center;
-    padding:48px 20px; position:relative; overflow:hidden;
-    background:
-      radial-gradient(1200px 600px at 50% -10%, rgba(124,155,255,.18), transparent 60%),
-      radial-gradient(900px 500px at 90% 110%, rgba(255,204,63,.12), transparent 60%);
-  }
-  .cat-wrap{position:relative; display:inline-block}
-  .cat{width:auto; height:min(60svh,420px); max-width:86vw; border-radius:22px;
-    object-fit:cover; background:#000; box-shadow:0 18px 50px rgba(0,0,0,.4)}
-  .sound-btn{
-    position:absolute; bottom:12px; right:12px; width:44px; height:44px; border-radius:50%;
-    border:0; cursor:pointer; background:rgba(0,0,0,.55); color:#fff; font-size:1.1rem;
-    display:grid; place-items:center; backdrop-filter:blur(4px); transition:transform .15s ease}
-  .sound-btn:hover{transform:scale(1.08)}
+  /* ===== TOP BAR UMG ===== */
+  .topbar{position:fixed; inset:0 0 auto 0; z-index:30; display:flex; align-items:center; gap:12px;
+    padding:12px clamp(14px,4vw,26px); background:linear-gradient(to bottom, rgba(5,8,20,.72), transparent);
+    backdrop-filter:blur(3px)}
+  .topbar img{width:44px; height:44px; border-radius:50%; background:#fff; padding:2px;
+    box-shadow:0 4px 14px rgba(0,0,0,.35); flex:none}
+  .topbar .t-txt{color:#fff; font-size:.82rem; font-weight:600; text-shadow:0 1px 4px rgba(0,0,0,.6); line-height:1.25}
+  .topbar .t-txt small{display:block; font-weight:400; opacity:.85; font-size:.74rem}
 
-  .kicker{
-    display:inline-block; margin:22px 0 10px; padding:6px 14px; border-radius:999px;
-    background:var(--brand); color:var(--brand-ink); font-weight:700; font-size:.82rem;
-    letter-spacing:.06em; text-transform:uppercase;
-  }
-  .hero h1{font-size:clamp(2.8rem,10vw,6rem); font-weight:800; letter-spacing:-.02em}
-  .hero p.lead{color:var(--muted); font-size:clamp(1.05rem,2.6vw,1.3rem); max-width:620px; margin:16px auto 28px}
-  .scroll-hint{margin-top:10px; color:var(--muted); font-size:.9rem; display:flex; gap:8px; align-items:center; justify-content:center}
-  .scroll-hint span{animation:down 1.6s ease-in-out infinite}
-  @keyframes down{50%{transform:translateY(5px)}}
-  .btn{
-    display:inline-block; padding:14px 26px; border-radius:999px; font-weight:700;
-    text-decoration:none; background:var(--accent); color:#fff; border:0; cursor:pointer;
-    transition:transform .15s ease, filter .15s ease;
-  }
+  /* ===== HERO VIDEO (primero) ===== */
+  .hero{position:relative; min-height:100svh; display:grid; place-items:center; overflow:hidden; background:#05070f}
+  .hero video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0}
+  .hero::after{content:""; position:absolute; inset:0; z-index:1;
+    background:linear-gradient(to bottom, rgba(5,7,15,.35) 0%, rgba(5,7,15,.15) 40%, rgba(5,7,15,.85) 100%)}
+  .hero .inner{position:relative; z-index:2; text-align:center; padding:96px 20px 40px; max-width:720px}
+  .badge{display:inline-block; margin-bottom:14px; padding:6px 16px; border-radius:999px;
+    background:var(--brand); color:var(--brand-ink); font-weight:800; font-size:.8rem;
+    letter-spacing:.07em; text-transform:uppercase}
+  .hero h1{font-size:clamp(3rem,13vw,6.5rem); font-weight:900; color:#fff; letter-spacing:-.02em;
+    text-shadow:0 6px 30px rgba(0,0,0,.6)}
+  .hero .lead{color:#e9edff; font-size:clamp(1.05rem,2.8vw,1.3rem); margin:14px auto 26px; max-width:560px;
+    text-shadow:0 2px 12px rgba(0,0,0,.7)}
+  .cta-row{display:flex; gap:12px; flex-wrap:wrap; justify-content:center}
+  .btn{display:inline-flex; align-items:center; gap:8px; padding:14px 26px; border-radius:999px;
+    font-weight:700; font-family:Inter; text-decoration:none; border:0; cursor:pointer; font-size:1rem;
+    background:var(--accent); color:#fff; transition:transform .15s ease, filter .15s ease}
   .btn:hover{transform:translateY(-2px); filter:brightness(1.08)}
-  .btn.ghost{background:transparent; color:var(--text); border:1px solid var(--line)}
+  .btn.ghost{background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.3); backdrop-filter:blur(4px)}
+  .scroll-hint{position:absolute; bottom:18px; left:0; right:0; z-index:2; text-align:center;
+    color:#dfe4ff; font-size:.85rem; text-shadow:0 1px 6px rgba(0,0,0,.7)}
+  .scroll-hint span{display:block; font-size:1.3rem; animation:down 1.6s ease-in-out infinite}
+  @keyframes down{50%{transform:translateY(6px)}}
 
-  /* SECTIONS */
-  section.campaign{padding:72px 0}
-  .eyebrow{color:var(--accent); font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:.8rem}
-  h2.big{font-size:clamp(1.9rem,5vw,2.8rem); margin:10px 0 14px; font-weight:800}
-  .sub{color:var(--muted); max-width:680px; font-size:1.05rem}
+  /* overlay para activar sonido si el navegador bloquea el autoplay con audio */
+  .sound-gate{position:absolute; inset:0; z-index:5; display:none; place-items:center;
+    background:rgba(4,6,14,.55); backdrop-filter:blur(2px); cursor:pointer; text-align:center}
+  .sound-gate.show{display:grid}
+  .sound-gate .pill{display:inline-flex; align-items:center; gap:10px; padding:16px 28px; border-radius:999px;
+    background:var(--brand); color:var(--brand-ink); font-weight:800; font-size:1.05rem; animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{50%{transform:scale(1.05)}}
+  .sound-toggle{position:absolute; bottom:16px; right:16px; z-index:6; width:46px; height:46px; border-radius:50%;
+    border:0; cursor:pointer; background:rgba(0,0,0,.55); color:#fff; font-size:1.15rem; display:grid; place-items:center;
+    backdrop-filter:blur(4px); transition:transform .15s ease}
+  .sound-toggle:hover{transform:scale(1.1)}
+  @media (prefers-reduced-motion: reduce){.scroll-hint span,.sound-gate .pill{animation:none}}
 
-  .grid{display:grid; gap:18px; margin-top:34px}
-  .cols-2{grid-template-columns:repeat(2,1fr)}
+  /* ===== CAMPAÑA ===== */
+  section{padding:clamp(54px,8vw,84px) 0}
+  .eyebrow{color:var(--accent); font-weight:800; letter-spacing:.09em; text-transform:uppercase; font-size:.78rem}
+  h2.big{font-size:clamp(1.9rem,5.2vw,3rem); margin:10px 0 14px; font-weight:800; letter-spacing:-.01em}
+  .sub{color:var(--muted); max-width:680px; font-size:clamp(1rem,2.4vw,1.1rem)}
+
+  .grid{display:grid; gap:16px; margin-top:34px}
   .cols-3{grid-template-columns:repeat(3,1fr)}
-  @media (max-width:720px){.cols-2,.cols-3{grid-template-columns:1fr}}
+  .cols-2{grid-template-columns:repeat(2,1fr)}
+  @media (max-width:820px){.cols-3{grid-template-columns:1fr 1fr}}
+  @media (max-width:560px){.cols-3,.cols-2{grid-template-columns:1fr}}
 
-  .card{
-    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:22px; transition:transform .15s ease, border-color .15s ease;
-  }
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px;
+    transition:transform .15s ease, border-color .15s ease}
   .card:hover{transform:translateY(-3px); border-color:var(--accent)}
-  .card .ico{font-size:1.7rem}
-  .card h3{font-family:Inter,sans-serif; font-size:1.08rem; font-weight:700; margin:12px 0 6px}
+  .card .ico{font-size:1.8rem}
+  .card h3{font-family:Inter; font-size:1.06rem; font-weight:700; margin:12px 0 6px}
   .card p{margin:0; color:var(--muted); font-size:.96rem}
 
-  .flags li{margin:10px 0; padding-left:30px; position:relative; color:var(--text)}
-  .flags li::before{content:"⚑"; position:absolute; left:0; color:var(--bad)}
-  .flags{list-style:none; padding:0; margin:22px 0 0}
+  /* comparación bueno/malo */
+  .anatomy{background:var(--bg-soft)}
+  .mail{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; font-size:.92rem}
+  .mail .row{display:flex; gap:10px; padding:12px 16px; border-bottom:1px solid var(--line)}
+  .mail .row:last-child{border-bottom:0}
+  .mail .k{color:var(--muted); min-width:72px; font-weight:600}
+  .mail .flag{color:var(--bad); font-weight:600}
+  .mail .mark{background:rgba(251,113,133,.16); border-radius:5px; padding:1px 5px}
+  .legend{display:flex; align-items:center; gap:8px; margin-top:14px; color:var(--muted); font-size:.88rem}
 
-  .steps{counter-reset:s; list-style:none; padding:0; margin:30px 0 0}
-  .steps li{counter-increment:s; position:relative; padding:16px 16px 16px 64px; margin:12px 0;
+  .flags{list-style:none; padding:0; margin:30px 0 0; display:grid; gap:12px}
+  .flags li{padding:14px 16px 14px 48px; position:relative; background:var(--card);
+    border:1px solid var(--line); border-radius:12px}
+  .flags li::before{content:"⚑"; position:absolute; left:16px; top:14px; color:var(--bad); font-size:1.1rem}
+  .flags b{color:var(--text)}
+
+  .steps{counter-reset:s; list-style:none; padding:0; margin:30px 0 0; display:grid; gap:12px}
+  .steps li{counter-increment:s; position:relative; padding:18px 18px 18px 68px;
     background:var(--bg-soft); border:1px solid var(--line); border-radius:14px}
-  .steps li::before{content:counter(s); position:absolute; left:16px; top:16px;
-    width:32px; height:32px; display:grid; place-items:center; border-radius:50%;
-    background:var(--accent); color:#fff; font-weight:700; font-family:Inter}
-  .steps b{display:block; margin-bottom:2px}
+  .steps li::before{content:counter(s); position:absolute; left:18px; top:16px; width:34px; height:34px;
+    display:grid; place-items:center; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-family:Inter}
+  .steps b{display:block; margin-bottom:3px; font-size:1.05rem}
 
-  .callout{
-    margin-top:40px; background:linear-gradient(135deg, rgba(124,155,255,.14), rgba(255,204,63,.1));
-    border:1px solid var(--line); border-radius:var(--radius); padding:30px; text-align:center;
-  }
-  .callout h3{font-size:1.5rem; font-weight:800; margin-bottom:8px}
-  .callout .report{display:inline-block; margin-top:14px; font-weight:700; color:var(--accent)}
+  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:30px}
+  @media (max-width:560px){.stats{grid-template-columns:1fr}}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px; text-align:center}
+  .stat .n{font-family:Fraunces; font-weight:900; font-size:clamp(2rem,6vw,2.6rem); color:var(--brand)}
+  .stat .l{color:var(--muted); font-size:.92rem; margin-top:4px}
 
-  footer{border-top:1px solid var(--line); padding:34px 0; color:var(--muted); font-size:.9rem; text-align:center}
-  footer a{color:var(--accent)}
-  .divider{height:1px; background:var(--line); margin:0}
+  .callout{margin-top:44px; border-radius:var(--radius); padding:clamp(26px,5vw,40px); text-align:center;
+    background:linear-gradient(135deg, rgba(124,155,255,.16), rgba(255,204,63,.12)); border:1px solid var(--line)}
+  .callout h3{font-size:clamp(1.4rem,4vw,1.9rem); font-weight:800; margin-bottom:10px}
+  .report{display:inline-block; margin-top:16px; padding:12px 22px; border-radius:999px;
+    background:var(--accent); color:#fff; font-weight:700; text-decoration:none}
+
+  footer{border-top:1px solid var(--line); padding:38px 0; color:var(--muted); font-size:.88rem; text-align:center}
+  footer img{width:48px; height:48px; border-radius:50%; background:#fff; padding:2px; margin:0 auto 12px}
+  .divider{height:1px; background:var(--line)}
 </style>
 </head>
 <body>
 
-  <!-- ====== HERO: EL GATITO APUNTANDO Y RIÉNDOSE ====== -->
-  <header class="hero">
-    <div>
-      <div class="cat-wrap">
-        <video class="cat" id="catVid" src="assets/gatitoRiendo.mp4"
-               autoplay loop muted playsinline
-               aria-label="Gato apuntando y riéndose"></video>
-        <button class="sound-btn" id="soundBtn" type="button"
-                aria-label="Activar o silenciar el sonido">🔇</button>
-      </div>
-
-      <span class="kicker">Ejercicio de concientización</span>
-      <h1>¡Caíste! 🫵</h1>
-      <p class="lead">Hiciste clic en un enlace de <b>phishing simulado</b>. Tranquilo: esto fue una práctica segura y nadie robó tus datos. Pero si hubiera sido real, un atacante ya tendría tu contraseña.</p>
-      <a class="btn" href="#campana">Aprende a no caer la próxima →</a>
-      <div class="scroll-hint"><span>↓</span> Desliza para la campaña</div>
+  <!-- ===== BARRA SUPERIOR CON LOGO UMG ===== -->
+  <div class="topbar">
+    <img src="assets/umg-logo.webp" alt="Sello de la Universidad Mariano Gálvez de Guatemala" />
+    <div class="t-txt">Universidad Mariano Gálvez de Guatemala
+      <small>Ejercicio de concientización sobre phishing</small>
     </div>
+  </div>
+
+  <!-- ===== HERO: VIDEO PRIMERO ===== -->
+  <header class="hero">
+    <video id="catVid" src="assets/gatitoRiendo.mp4" autoplay loop playsinline
+           aria-label="Gato apuntando y riéndose"></video>
+
+    <!-- puerta de sonido: si el navegador bloquea el audio, un toque lo activa -->
+    <div class="sound-gate" id="soundGate" role="button" tabindex="0" aria-label="Toca para activar el sonido">
+      <div class="pill">🔊 Toca para activar el sonido</div>
+    </div>
+    <button class="sound-toggle" id="soundToggle" type="button" aria-label="Silenciar o activar el sonido">🔊</button>
+
+    <div class="inner">
+      <span class="badge">Phishing simulado · prueba segura</span>
+      <h1>¡Caíste! 🫵</h1>
+      <p class="lead">Hiciste clic en un enlace de phishing <b>simulado</b>. Nadie robó tus datos… esta vez. Si hubiera sido real, un atacante ya tendría tu contraseña.</p>
+      <div class="cta-row">
+        <a class="btn" href="#campana">Aprende a no caer →</a>
+        <a class="btn ghost" href="#reportar">Cómo reportar</a>
+      </div>
+    </div>
+    <div class="scroll-hint"><span>↓</span> Desliza para ver la campaña</div>
   </header>
 
-  <!-- ====== CAMPAÑA DE CONCIENTIZACIÓN ====== -->
+  <!-- ===== CAMPAÑA DE CONCIENTIZACIÓN ===== -->
   <main id="campana">
-    <section class="campaign wrap">
-      <p class="eyebrow">¿Qué pasó?</p>
+
+    <section class="wrap">
+      <p class="eyebrow">¿Qué acaba de pasar?</p>
       <h2 class="big">Esto fue phishing (simulado)</h2>
-      <p class="sub">El <b>phishing</b> es un engaño: alguien se hace pasar por una entidad de confianza —tu banco, la universidad, una red social— para que entregues tus datos, descargues algo malicioso o hagas clic donde no debes. Funciona porque apela a la prisa, el miedo o la curiosidad.</p>
+      <p class="sub">El <b>phishing</b> es un fraude: alguien se hace pasar por una entidad de confianza
+        —tu banco, la universidad, una red social, soporte técnico— para que entregues tus datos,
+        descargues algo malicioso o hagas clic donde no debes. Funciona porque explota la prisa,
+        el miedo y la curiosidad, no fallas técnicas.</p>
 
       <div class="grid cols-3">
-        <div class="card"><div class="ico">🎣</div><h3>Suplantan identidad</h3><p>Imitan logos, nombres y correos casi idénticos a los reales.</p></div>
-        <div class="card"><div class="ico">⏰</div><h3>Crean urgencia</h3><p>"Tu cuenta será bloqueada en 24 horas" te empuja a actuar sin pensar.</p></div>
-        <div class="card"><div class="ico">🔑</div><h3>Buscan tus datos</h3><p>Contraseñas, códigos de verificación, tarjetas o accesos a sistemas.</p></div>
+        <div class="card"><div class="ico">🎭</div><h3>Suplanta identidad</h3><p>Copia logos, nombres y direcciones casi idénticas a las reales para ganarse tu confianza.</p></div>
+        <div class="card"><div class="ico">⏰</div><h3>Crea urgencia</h3><p>"Tu cuenta será bloqueada en 24 horas" te empuja a actuar sin detenerte a pensar.</p></div>
+        <div class="card"><div class="ico">🔑</div><h3>Roba tus accesos</h3><p>Contraseñas, códigos de verificación, tarjetas o accesos a los sistemas de la institución.</p></div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="n">9 de 10</div><div class="l">ciberataques empiezan con un correo de phishing</div></div>
+        <div class="stat"><div class="n">&lt; 60 s</div><div class="l">tarda una persona promedio en morder el anzuelo</div></div>
+        <div class="stat"><div class="n">#1</div><div class="l">causa de robo de credenciales en universidades</div></div>
       </div>
     </section>
 
-    <div class="divider wrap" style="max-width:var(--maxw)"></div>
+    <div class="divider"></div>
 
-    <section class="campaign wrap">
-      <p class="eyebrow">Señales de alerta</p>
-      <h2 class="big">Cómo reconocer un phishing</h2>
-      <p class="sub">La próxima vez, antes de hacer clic, busca estas banderas rojas:</p>
-      <ul class="flags">
-        <li><b>Remitente sospechoso:</b> el correo no termina en el dominio oficial (revisa letra por letra).</li>
-        <li><b>Enlaces disfrazados:</b> pasa el cursor sobre el enlace y mira a dónde lleva de verdad.</li>
-        <li><b>Urgencia o amenazas:</b> "actúa ya o perderás tu cuenta".</li>
-        <li><b>Errores de ortografía</b> y saludos genéricos ("Estimado usuario").</li>
-        <li><b>Te piden contraseñas o códigos:</b> ninguna institución seria los pide por correo.</li>
-        <li><b>Archivos adjuntos</b> inesperados o botones que no reconoces.</li>
-      </ul>
+    <!-- anatomía de un correo falso -->
+    <section class="anatomy">
+      <div class="wrap">
+        <p class="eyebrow">Míralo de cerca</p>
+        <h2 class="big">Anatomía de un correo falso</h2>
+        <p class="sub">Un correo de phishing casi siempre delata estas pistas. Aprende a verlas antes de hacer clic.</p>
+        <div class="grid cols-2" style="align-items:start">
+          <div class="mail" aria-label="Ejemplo de correo de phishing">
+            <div class="row"><span class="k">De:</span><span>Soporte UMG <span class="flag mark">&lt;soporte@umg-seguridad.net&gt;</span></span></div>
+            <div class="row"><span class="k">Asunto:</span><span><span class="mark">URGENTE:</span> tu cuenta será <span class="mark">suspendida hoy</span></span></div>
+            <div class="row"><span class="k">Cuerpo:</span><span>"Estimado usuario, detectamos actividad sospechosa. <span class="mark">Verifica tu contraseña</span> en el siguiente enlace o perderás el acceso: <span class="mark">http://umg-portal-login.ru</span>"</span></div>
+          </div>
+          <ul class="flags" style="margin-top:0">
+            <li><b>Dominio falso:</b> no es <code>@umg.edu.gt</code>, sino <code>@umg-seguridad.net</code>.</li>
+            <li><b>Urgencia y amenaza:</b> "suspendida hoy", "perderás el acceso".</li>
+            <li><b>Saludo genérico:</b> "Estimado usuario" en vez de tu nombre.</li>
+            <li><b>Enlace sospechoso:</b> un dominio raro (<code>.ru</code>) que no es el oficial.</li>
+            <li><b>Te pide la contraseña:</b> ninguna institución la solicita por correo.</li>
+          </ul>
+        </div>
+        <div class="legend">💡 Tip: en una computadora, pasa el cursor sobre el enlace (sin hacer clic) para ver su destino real.</div>
+      </div>
     </section>
 
-    <div class="divider wrap" style="max-width:var(--maxw)"></div>
+    <div class="divider"></div>
 
-    <section class="campaign wrap">
-      <p class="eyebrow">Qué hacer</p>
-      <h2 class="big">Tu defensa en 4 pasos</h2>
+    <section class="wrap">
+      <p class="eyebrow">Tu defensa</p>
+      <h2 class="big">4 pasos para no caer</h2>
       <ol class="steps">
-        <li><b>Detente y respira</b>No hagas clic por impulso. Un segundo de duda evita el ataque.</li>
-        <li><b>Verifica por otro canal</b>¿Es tu banco? Llama al número de la tarjeta, no al del correo.</li>
-        <li><b>No entregues datos ni descargues</b>Ninguna contraseña viaja por correo. Si dudas, no lo hagas.</li>
-        <li><b>Reporta</b>Avisa a soporte/TI de tu institución. Reportar protege a toda la comunidad.</li>
+        <li><b>Detente y respira</b>El phishing vive de la prisa. Un segundo de duda desactiva casi cualquier engaño.</li>
+        <li><b>Verifica por otro canal</b>¿Es tu banco o la universidad? Entra tú mismo al sitio oficial o llama al número conocido; nunca al del correo.</li>
+        <li><b>No entregues datos ni descargues</b>Ninguna contraseña o código viaja por correo. Si algo huele raro, no lo hagas.</li>
+        <li><b>Reporta de inmediato</b>Avisar a soporte protege a toda la comunidad universitaria, no solo a ti.</li>
       </ol>
+    </section>
 
+    <!-- reportar -->
+    <section class="wrap" id="reportar">
       <div class="callout">
         <h3>Esta vez fue una práctica. La próxima podría ser real.</h3>
-        <p class="sub" style="margin:0 auto">Si recibes un correo sospechoso, no lo borres en silencio: repórtalo.</p>
-        <div class="report">📧 Reporta a: soporte@tu-universidad.edu</div>
+        <p class="sub" style="margin:0 auto">Si recibes un correo o enlace sospechoso, no lo borres en silencio: repórtalo para que el equipo de seguridad proteja a los demás.</p>
+        <a class="report" href="mailto:soporte@umg.edu.gt?subject=Reporte%20de%20phishing">📧 Reportar correo sospechoso</a>
       </div>
     </section>
   </main>
 
-  <footer class="wrap">
-    <p>Ejercicio de concientización sobre phishing · Uso educativo · Ningún dato fue capturado.</p>
-    <p>Hecho para la práctica universitaria. Comparte lo aprendido 🐱</p>
+  <footer>
+    <div class="wrap">
+      <img src="assets/umg-logo.webp" alt="Sello UMG" />
+      <p><b>Universidad Mariano Gálvez de Guatemala</b> · Ejercicio de concientización sobre phishing</p>
+      <p>Uso estrictamente educativo. Esta página no captura ni almacena ningún dato de las personas.</p>
+    </div>
   </footer>
 
   <script>
     (function(){
       var v = document.getElementById('catVid');
-      var b = document.getElementById('soundBtn');
-      if(!v || !b) return;
-      b.addEventListener('click', function(){
+      var gate = document.getElementById('soundGate');
+      var toggle = document.getElementById('soundToggle');
+      if(!v) return;
+
+      function setIcon(){ toggle.textContent = v.muted ? '🔇' : '🔊'; }
+
+      // 1) Intentar reproducir CON sonido al entrar.
+      v.muted = false;
+      var p = v.play();
+      if(p && p.catch){
+        p.catch(function(){
+          // 2) El navegador bloqueó el audio: reproducir en silencio y pedir un toque.
+          v.muted = true; setIcon(); v.play().catch(function(){});
+          gate.classList.add('show');
+        });
+      }
+
+      function enableSound(){
+        v.muted = false; v.currentTime = 0;
+        v.play().then(function(){ gate.classList.remove('show'); setIcon(); })
+                .catch(function(){ gate.classList.remove('show'); });
+      }
+      // Cualquier interacción activa el sonido (y quita la puerta).
+      gate.addEventListener('click', enableSound);
+      gate.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' ') enableSound(); });
+      document.addEventListener('click', function once(){
+        if(v.muted){ enableSound(); }
+        document.removeEventListener('click', once);
+      }, {once:false});
+
+      toggle.addEventListener('click', function(e){
+        e.stopPropagation();
         v.muted = !v.muted;
-        b.textContent = v.muted ? '🔇' : '🔊';
-        if(!v.muted){ v.currentTime = 0; v.play(); }
+        if(!v.muted){ v.currentTime = 0; v.play(); gate.classList.remove('show'); }
+        setIcon();
       });
+
+      setIcon();
     })();
   </script>
 
