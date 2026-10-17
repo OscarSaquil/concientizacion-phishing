@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>¡Caíste! · Concientización sobre Phishing</title>
+<meta name="description" content="Acabas de participar en un ejercicio de concientización sobre phishing. Aprende a reconocer y reportar correos y enlaces maliciosos." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0b1020; --bg-soft:#121934; --card:#161e40; --line:#283163;
+    --text:#eaeefb; --muted:#9aa6d4; --brand:#ffcc3f; --brand-ink:#2a2200;
+    --good:#34d399; --bad:#fb7185; --accent:#7c9bff;
+    --radius:18px; --maxw:960px;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#f6f7fc; --bg-soft:#ffffff; --card:#ffffff; --line:#e4e8f5;
+      --text:#141a33; --muted:#5b6690; --brand:#f2b600; --brand-ink:#2a2200;
+      --accent:#3a5bd0;
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:Inter,system-ui,sans-serif; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px}
+  h1,h2,h3{font-family:Fraunces,Georgia,serif; line-height:1.1; margin:0}
+
+  /* HERO */
+  .hero{
+    min-height:100svh; display:grid; place-items:center; text-align:center;
+    padding:48px 20px; position:relative; overflow:hidden;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(124,155,255,.18), transparent 60%),
+      radial-gradient(900px 500px at 90% 110%, rgba(255,204,63,.12), transparent 60%);
+  }
+  .cat{width:min(260px,62vw); height:auto; filter:drop-shadow(0 18px 40px rgba(0,0,0,.35)); animation:bob 3s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(-10px) rotate(-1.5deg)}}
+  .paw{transform-origin:170px 150px; animation:point 1.4s ease-in-out infinite}
+  @keyframes point{0%,100%{transform:rotate(0)}50%{transform:rotate(-9deg)}}
+  @media (prefers-reduced-motion: reduce){.cat,.paw{animation:none}}
+
+  .kicker{
+    display:inline-block; margin:22px 0 10px; padding:6px 14px; border-radius:999px;
+    background:var(--brand); color:var(--brand-ink); font-weight:700; font-size:.82rem;
+    letter-spacing:.06em; text-transform:uppercase;
+  }
+  .hero h1{font-size:clamp(2.8rem,10vw,6rem); font-weight:800; letter-spacing:-.02em}
+  .hero p.lead{color:var(--muted); font-size:clamp(1.05rem,2.6vw,1.3rem); max-width:620px; margin:16px auto 28px}
+  .scroll-hint{margin-top:10px; color:var(--muted); font-size:.9rem; display:flex; gap:8px; align-items:center; justify-content:center}
+  .scroll-hint span{animation:down 1.6s ease-in-out infinite}
+  @keyframes down{50%{transform:translateY(5px)}}
+  .btn{
+    display:inline-block; padding:14px 26px; border-radius:999px; font-weight:700;
+    text-decoration:none; background:var(--accent); color:#fff; border:0; cursor:pointer;
+    transition:transform .15s ease, filter .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px); filter:brightness(1.08)}
+  .btn.ghost{background:transparent; color:var(--text); border:1px solid var(--line)}
+
+  /* SECTIONS */
+  section.campaign{padding:72px 0}
+  .eyebrow{color:var(--accent); font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:.8rem}
+  h2.big{font-size:clamp(1.9rem,5vw,2.8rem); margin:10px 0 14px; font-weight:800}
+  .sub{color:var(--muted); max-width:680px; font-size:1.05rem}
+
+  .grid{display:grid; gap:18px; margin-top:34px}
+  .cols-2{grid-template-columns:repeat(2,1fr)}
+  .cols-3{grid-template-columns:repeat(3,1fr)}
+  @media (max-width:720px){.cols-2,.cols-3{grid-template-columns:1fr}}
+
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; transition:transform .15s ease, border-color .15s ease;
+  }
+  .card:hover{transform:translateY(-3px); border-color:var(--accent)}
+  .card .ico{font-size:1.7rem}
+  .card h3{font-family:Inter,sans-serif; font-size:1.08rem; font-weight:700; margin:12px 0 6px}
+  .card p{margin:0; color:var(--muted); font-size:.96rem}
+
+  .flags li{margin:10px 0; padding-left:30px; position:relative; color:var(--text)}
+  .flags li::before{content:"⚑"; position:absolute; left:0; color:var(--bad)}
+  .flags{list-style:none; padding:0; margin:22px 0 0}
+
+  .steps{counter-reset:s; list-style:none; padding:0; margin:30px 0 0}
+  .steps li{counter-increment:s; position:relative; padding:16px 16px 16px 64px; margin:12px 0;
+    background:var(--bg-soft); border:1px solid var(--line); border-radius:14px}
+  .steps li::before{content:counter(s); position:absolute; left:16px; top:16px;
+    width:32px; height:32px; display:grid; place-items:center; border-radius:50%;
+    background:var(--accent); color:#fff; font-weight:700; font-family:Inter}
+  .steps b{display:block; margin-bottom:2px}
+
+  .callout{
+    margin-top:40px; background:linear-gradient(135deg, rgba(124,155,255,.14), rgba(255,204,63,.1));
+    border:1px solid var(--line); border-radius:var(--radius); padding:30px; text-align:center;
+  }
+  .callout h3{font-size:1.5rem; font-weight:800; margin-bottom:8px}
+  .callout .report{display:inline-block; margin-top:14px; font-weight:700; color:var(--accent)}
+
+  footer{border-top:1px solid var(--line); padding:34px 0; color:var(--muted); font-size:.9rem; text-align:center}
+  footer a{color:var(--accent)}
+  .divider{height:1px; background:var(--line); margin:0}
+</style>
+</head>
+<body>
+
+  <!-- ====== HERO: EL GATITO APUNTANDO Y RIÉNDOSE ====== -->
+  <header class="hero">
+    <div>
+      <svg class="cat" viewBox="0 0 260 260" role="img" aria-label="Gato apuntando y riéndose">
+        <!-- cola -->
+        <path d="M60 210 C20 200 20 150 50 150" fill="none" stroke="#f2b600" stroke-width="16" stroke-linecap="round"/>
+        <!-- cuerpo -->
+        <ellipse cx="120" cy="190" rx="70" ry="55" fill="#ffcc3f"/>
+        <!-- cabeza -->
+        <g>
+          <!-- orejas -->
+          <path d="M70 70 L60 25 L105 55 Z" fill="#ffcc3f"/>
+          <path d="M170 70 L210 25 L135 55 Z" fill="#ffcc3f"/>
+          <path d="M76 62 L71 40 L92 54 Z" fill="#ff9db1"/>
+          <path d="M164 62 L190 40 L148 54 Z" fill="#ff9db1"/>
+          <circle cx="120" cy="100" r="62" fill="#ffd968"/>
+          <!-- ojos cerrados de risa -->
+          <path d="M88 96 q12 -14 24 0" fill="none" stroke="#2a2200" stroke-width="6" stroke-linecap="round"/>
+          <path d="M128 96 q12 -14 24 0" fill="none" stroke="#2a2200" stroke-width="6" stroke-linecap="round"/>
+          <!-- lagrimita de risa -->
+          <path d="M84 104 q-4 8 0 12 q4 -4 0 -12" fill="#7c9bff"/>
+          <!-- nariz -->
+          <path d="M116 112 h8 l-4 6 z" fill="#ff7a93"/>
+          <!-- boca riendo -->
+          <path d="M100 120 q20 26 40 0" fill="#2a2200"/>
+          <path d="M100 120 q20 26 40 0" fill="#ff5d7a" transform="translate(0,6) scale(1,.5)" transform-origin="120 120"/>
+          <!-- bigotes -->
+          <g stroke="#2a2200" stroke-width="3" stroke-linecap="round">
+            <path d="M60 110 h26"/><path d="M60 122 h26"/>
+            <path d="M154 110 h26"/><path d="M154 122 h26"/>
+          </g>
+        </g>
+        <!-- pata que apunta hacia el que lee -->
+        <g class="paw">
+          <path d="M150 150 C185 140 215 150 236 168" fill="none" stroke="#ffcc3f" stroke-width="20" stroke-linecap="round"/>
+          <circle cx="238" cy="170" r="15" fill="#ffd968"/>
+          <circle cx="246" cy="164" r="4" fill="#ff9db1"/>
+          <circle cx="248" cy="172" r="4" fill="#ff9db1"/>
+          <circle cx="245" cy="180" r="4" fill="#ff9db1"/>
+        </g>
+      </svg>
+
+      <span class="kicker">Ejercicio de concientización</span>
+      <h1>¡Caíste! 🫵</h1>
+      <p class="lead">Hiciste clic en un enlace de <b>phishing simulado</b>. Tranquilo: esto fue una práctica segura y nadie robó tus datos. Pero si hubiera sido real, un atacante ya tendría tu contraseña.</p>
+      <a class="btn" href="#campana">Aprende a no caer la próxima →</a>
+      <div class="scroll-hint"><span>↓</span> Desliza para la campaña</div>
+    </div>
+  </header>
+
+  <!-- ====== CAMPAÑA DE CONCIENTIZACIÓN ====== -->
+  <main id="campana">
+    <section class="campaign wrap">
+      <p class="eyebrow">¿Qué pasó?</p>
+      <h2 class="big">Esto fue phishing (simulado)</h2>
+      <p class="sub">El <b>phishing</b> es un engaño: alguien se hace pasar por una entidad de confianza —tu banco, la universidad, una red social— para que entregues tus datos, descargues algo malicioso o hagas clic donde no debes. Funciona porque apela a la prisa, el miedo o la curiosidad.</p>
+
+      <div class="grid cols-3">
+        <div class="card"><div class="ico">🎣</div><h3>Suplantan identidad</h3><p>Imitan logos, nombres y correos casi idénticos a los reales.</p></div>
+        <div class="card"><div class="ico">⏰</div><h3>Crean urgencia</h3><p>"Tu cuenta será bloqueada en 24 horas" te empuja a actuar sin pensar.</p></div>
+        <div class="card"><div class="ico">🔑</div><h3>Buscan tus datos</h3><p>Contraseñas, códigos de verificación, tarjetas o accesos a sistemas.</p></div>
+      </div>
+    </section>
+
+    <div class="divider wrap" style="max-width:var(--maxw)"></div>
+
+    <section class="campaign wrap">
+      <p class="eyebrow">Señales de alerta</p>
+      <h2 class="big">Cómo reconocer un phishing</h2>
+      <p class="sub">La próxima vez, antes de hacer clic, busca estas banderas rojas:</p>
+      <ul class="flags">
+        <li><b>Remitente sospechoso:</b> el correo no termina en el dominio oficial (revisa letra por letra).</li>
+        <li><b>Enlaces disfrazados:</b> pasa el cursor sobre el enlace y mira a dónde lleva de verdad.</li>
+        <li><b>Urgencia o amenazas:</b> "actúa ya o perderás tu cuenta".</li>
+        <li><b>Errores de ortografía</b> y saludos genéricos ("Estimado usuario").</li>
+        <li><b>Te piden contraseñas o códigos:</b> ninguna institución seria los pide por correo.</li>
+        <li><b>Archivos adjuntos</b> inesperados o botones que no reconoces.</li>
+      </ul>
+    </section>
+
+    <div class="divider wrap" style="max-width:var(--maxw)"></div>
+
+    <section class="campaign wrap">
+      <p class="eyebrow">Qué hacer</p>
+      <h2 class="big">Tu defensa en 4 pasos</h2>
+      <ol class="steps">
+        <li><b>Detente y respira</b>No hagas clic por impulso. Un segundo de duda evita el ataque.</li>
+        <li><b>Verifica por otro canal</b>¿Es tu banco? Llama al número de la tarjeta, no al del correo.</li>
+        <li><b>No entregues datos ni descargues</b>Ninguna contraseña viaja por correo. Si dudas, no lo hagas.</li>
+        <li><b>Reporta</b>Avisa a soporte/TI de tu institución. Reportar protege a toda la comunidad.</li>
+      </ol>
+
+      <div class="callout">
+        <h3>Esta vez fue una práctica. La próxima podría ser real.</h3>
+        <p class="sub" style="margin:0 auto">Si recibes un correo sospechoso, no lo borres en silencio: repórtalo.</p>
+        <div class="report">📧 Reporta a: soporte@tu-universidad.edu</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p>Ejercicio de concientización sobre phishing · Uso educativo · Ningún dato fue capturado.</p>
+    <p>Hecho para la práctica universitaria. Comparte lo aprendido 🐱</p>
+  </footer>
+
+</body>
+</html>
