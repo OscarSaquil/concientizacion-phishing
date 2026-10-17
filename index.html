@@ -65,18 +65,7 @@
   .scroll-hint span{display:block; font-size:1.3rem; animation:down 1.6s ease-in-out infinite}
   @keyframes down{50%{transform:translateY(6px)}}
 
-  /* overlay para activar sonido si el navegador bloquea el autoplay con audio */
-  .sound-gate{position:absolute; inset:0; z-index:5; display:none; place-items:center;
-    background:rgba(4,6,14,.55); backdrop-filter:blur(2px); cursor:pointer; text-align:center}
-  .sound-gate.show{display:grid}
-  .sound-gate .pill{display:inline-flex; align-items:center; gap:10px; padding:16px 28px; border-radius:999px;
-    background:var(--brand); color:var(--brand-ink); font-weight:800; font-size:1.05rem; animation:pulse 1.6s ease-in-out infinite}
-  @keyframes pulse{50%{transform:scale(1.05)}}
-  .sound-toggle{position:absolute; bottom:16px; right:16px; z-index:6; width:46px; height:46px; border-radius:50%;
-    border:0; cursor:pointer; background:rgba(0,0,0,.55); color:#fff; font-size:1.15rem; display:grid; place-items:center;
-    backdrop-filter:blur(4px); transition:transform .15s ease}
-  .sound-toggle:hover{transform:scale(1.1)}
-  @media (prefers-reduced-motion: reduce){.scroll-hint span,.sound-gate .pill{animation:none}}
+  @media (prefers-reduced-motion: reduce){.scroll-hint span{animation:none}}
 
   /* ===== CAMPAÑA ===== */
   section{padding:clamp(54px,8vw,84px) 0}
@@ -151,12 +140,6 @@
   <header class="hero">
     <video id="catVid" src="assets/gatitoRiendo.mp4" autoplay loop playsinline
            aria-label="Gato apuntando y riéndose"></video>
-
-    <!-- puerta de sonido: si el navegador bloquea el audio, un toque lo activa -->
-    <div class="sound-gate" id="soundGate" role="button" tabindex="0" aria-label="Toca para activar el sonido">
-      <div class="pill">🔊 Toca para activar el sonido</div>
-    </div>
-    <button class="sound-toggle" id="soundToggle" type="button" aria-label="Silenciar o activar el sonido">🔊</button>
 
     <div class="inner">
       <span class="badge">Phishing simulado · prueba segura</span>
@@ -254,44 +237,33 @@
   <script>
     (function(){
       var v = document.getElementById('catVid');
-      var gate = document.getElementById('soundGate');
-      var toggle = document.getElementById('soundToggle');
       if(!v) return;
 
-      function setIcon(){ toggle.textContent = v.muted ? '🔇' : '🔊'; }
-
-      // 1) Intentar reproducir CON sonido al entrar.
+      // Intentar reproducir CON sonido de inmediato.
       v.muted = false;
       var p = v.play();
       if(p && p.catch){
         p.catch(function(){
-          // 2) El navegador bloqueó el audio: reproducir en silencio y pedir un toque.
-          v.muted = true; setIcon(); v.play().catch(function(){});
-          gate.classList.add('show');
+          // El navegador bloqueó el audio: reproducir en silencio y activarlo,
+          // de forma invisible, en cuanto el usuario haga el primer gesto.
+          v.muted = true;
+          v.play().catch(function(){});
+
+          function unmute(){
+            v.muted = false;
+            v.play().catch(function(){});
+            remove();
+          }
+          function remove(){
+            ['pointerdown','touchstart','keydown','wheel','scroll','mousemove'].forEach(function(ev){
+              window.removeEventListener(ev, unmute);
+            });
+          }
+          ['pointerdown','touchstart','keydown','wheel','scroll','mousemove'].forEach(function(ev){
+            window.addEventListener(ev, unmute, {passive:true, once:false});
+          });
         });
       }
-
-      function enableSound(){
-        v.muted = false; v.currentTime = 0;
-        v.play().then(function(){ gate.classList.remove('show'); setIcon(); })
-                .catch(function(){ gate.classList.remove('show'); });
-      }
-      // Cualquier interacción activa el sonido (y quita la puerta).
-      gate.addEventListener('click', enableSound);
-      gate.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' ') enableSound(); });
-      document.addEventListener('click', function once(){
-        if(v.muted){ enableSound(); }
-        document.removeEventListener('click', once);
-      }, {once:false});
-
-      toggle.addEventListener('click', function(e){
-        e.stopPropagation();
-        v.muted = !v.muted;
-        if(!v.muted){ v.currentTime = 0; v.play(); gate.classList.remove('show'); }
-        setIcon();
-      });
-
-      setIcon();
     })();
   </script>
 
