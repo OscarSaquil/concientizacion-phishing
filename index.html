@@ -40,11 +40,14 @@
       radial-gradient(1200px 600px at 50% -10%, rgba(124,155,255,.18), transparent 60%),
       radial-gradient(900px 500px at 90% 110%, rgba(255,204,63,.12), transparent 60%);
   }
-  .cat{width:min(260px,62vw); height:auto; filter:drop-shadow(0 18px 40px rgba(0,0,0,.35)); animation:bob 3s ease-in-out infinite}
-  @keyframes bob{50%{transform:translateY(-10px) rotate(-1.5deg)}}
-  .paw{transform-origin:170px 150px; animation:point 1.4s ease-in-out infinite}
-  @keyframes point{0%,100%{transform:rotate(0)}50%{transform:rotate(-9deg)}}
-  @media (prefers-reduced-motion: reduce){.cat,.paw{animation:none}}
+  .cat-wrap{position:relative; display:inline-block}
+  .cat{width:auto; height:min(60svh,420px); max-width:86vw; border-radius:22px;
+    object-fit:cover; background:#000; box-shadow:0 18px 50px rgba(0,0,0,.4)}
+  .sound-btn{
+    position:absolute; bottom:12px; right:12px; width:44px; height:44px; border-radius:50%;
+    border:0; cursor:pointer; background:rgba(0,0,0,.55); color:#fff; font-size:1.1rem;
+    display:grid; place-items:center; backdrop-filter:blur(4px); transition:transform .15s ease}
+  .sound-btn:hover{transform:scale(1.08)}
 
   .kicker{
     display:inline-block; margin:22px 0 10px; padding:6px 14px; border-radius:999px;
@@ -113,44 +116,13 @@
   <!-- ====== HERO: EL GATITO APUNTANDO Y RIÉNDOSE ====== -->
   <header class="hero">
     <div>
-      <svg class="cat" viewBox="0 0 260 260" role="img" aria-label="Gato apuntando y riéndose">
-        <!-- cola -->
-        <path d="M60 210 C20 200 20 150 50 150" fill="none" stroke="#f2b600" stroke-width="16" stroke-linecap="round"/>
-        <!-- cuerpo -->
-        <ellipse cx="120" cy="190" rx="70" ry="55" fill="#ffcc3f"/>
-        <!-- cabeza -->
-        <g>
-          <!-- orejas -->
-          <path d="M70 70 L60 25 L105 55 Z" fill="#ffcc3f"/>
-          <path d="M170 70 L210 25 L135 55 Z" fill="#ffcc3f"/>
-          <path d="M76 62 L71 40 L92 54 Z" fill="#ff9db1"/>
-          <path d="M164 62 L190 40 L148 54 Z" fill="#ff9db1"/>
-          <circle cx="120" cy="100" r="62" fill="#ffd968"/>
-          <!-- ojos cerrados de risa -->
-          <path d="M88 96 q12 -14 24 0" fill="none" stroke="#2a2200" stroke-width="6" stroke-linecap="round"/>
-          <path d="M128 96 q12 -14 24 0" fill="none" stroke="#2a2200" stroke-width="6" stroke-linecap="round"/>
-          <!-- lagrimita de risa -->
-          <path d="M84 104 q-4 8 0 12 q4 -4 0 -12" fill="#7c9bff"/>
-          <!-- nariz -->
-          <path d="M116 112 h8 l-4 6 z" fill="#ff7a93"/>
-          <!-- boca riendo -->
-          <path d="M100 120 q20 26 40 0" fill="#2a2200"/>
-          <path d="M100 120 q20 26 40 0" fill="#ff5d7a" transform="translate(0,6) scale(1,.5)" transform-origin="120 120"/>
-          <!-- bigotes -->
-          <g stroke="#2a2200" stroke-width="3" stroke-linecap="round">
-            <path d="M60 110 h26"/><path d="M60 122 h26"/>
-            <path d="M154 110 h26"/><path d="M154 122 h26"/>
-          </g>
-        </g>
-        <!-- pata que apunta hacia el que lee -->
-        <g class="paw">
-          <path d="M150 150 C185 140 215 150 236 168" fill="none" stroke="#ffcc3f" stroke-width="20" stroke-linecap="round"/>
-          <circle cx="238" cy="170" r="15" fill="#ffd968"/>
-          <circle cx="246" cy="164" r="4" fill="#ff9db1"/>
-          <circle cx="248" cy="172" r="4" fill="#ff9db1"/>
-          <circle cx="245" cy="180" r="4" fill="#ff9db1"/>
-        </g>
-      </svg>
+      <div class="cat-wrap">
+        <video class="cat" id="catVid" src="assets/gatitoRiendo.mp4"
+               autoplay loop muted playsinline
+               aria-label="Gato apuntando y riéndose"></video>
+        <button class="sound-btn" id="soundBtn" type="button"
+                aria-label="Activar o silenciar el sonido">🔇</button>
+      </div>
 
       <span class="kicker">Ejercicio de concientización</span>
       <h1>¡Caíste! 🫵</h1>
@@ -214,6 +186,19 @@
     <p>Ejercicio de concientización sobre phishing · Uso educativo · Ningún dato fue capturado.</p>
     <p>Hecho para la práctica universitaria. Comparte lo aprendido 🐱</p>
   </footer>
+
+  <script>
+    (function(){
+      var v = document.getElementById('catVid');
+      var b = document.getElementById('soundBtn');
+      if(!v || !b) return;
+      b.addEventListener('click', function(){
+        v.muted = !v.muted;
+        b.textContent = v.muted ? '🔇' : '🔊';
+        if(!v.muted){ v.currentTime = 0; v.play(); }
+      });
+    })();
+  </script>
 
 </body>
 </html>
