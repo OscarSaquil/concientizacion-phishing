@@ -226,7 +226,7 @@
 
   <!-- ===== HERO: VIDEO DEL GATO ===== -->
   <header class="hero">
-    <video id="catVid" src="assets/gatitoRiendo.mp4" loop playsinline preload="auto" aria-label="Gato apuntando y riéndose"></video>
+    <video id="catVid" src="assets/gatitoRiendo.mp4" playsinline preload="auto" aria-label="Gato apuntando y riéndose"></video>
     <div class="inner">
       <span class="badge"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg> Phishing simulado · prueba segura</span>
       <h1>¡Caíste!</h1>
@@ -320,6 +320,20 @@
       var btn = document.getElementById('verBtn');
       var v = document.getElementById('catVid');
       if(!btn || !v) return;
+
+      var MAX_CON_AUDIO = 4;   // el audio se escucha solo estas veces
+      var reproducciones = 0;
+
+      // Al terminar cada vuelta: repetir con audio hasta 4 veces; luego seguir en bucle silencioso.
+      v.addEventListener('ended', function(){
+        reproducciones++;
+        if(reproducciones < MAX_CON_AUDIO){
+          v.currentTime = 0; v.play().catch(function(){});   // sigue con sonido
+        }else{
+          v.muted = true; v.loop = true;                     // ya sonó 4 veces: sin audio, en bucle
+          v.currentTime = 0; v.play().catch(function(){});
+        }
+      });
 
       btn.addEventListener('click', function(){
         // El clic del usuario habilita el audio: el video suena sin bloqueo.
