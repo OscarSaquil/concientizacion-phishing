@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>¡Caíste! · Concientización sobre Phishing · UMG</title>
+<title>Aviso de seguridad · UMG</title>
 <meta name="description" content="Ejercicio de concientización sobre phishing de la Universidad Mariano Gálvez de Guatemala. Aprende a reconocer, evitar y reportar correos y enlaces maliciosos." />
 <meta name="theme-color" content="#0b1020" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,7 +14,7 @@
     --bg:#0b1020; --bg-soft:#121934; --card:#161e40; --line:#283163;
     --text:#eaeefb; --muted:#9aa6d4; --brand:#ffcc3f; --brand-ink:#2a2200;
     --good:#34d399; --bad:#fb7185; --accent:#7c9bff;
-    --umg-red:#c8202f; --umg-gold:#b48a3c; --umg-blue:#2d7cc0;
+    --umg-red:#c8202f; --umg-red-d:#a71826; --umg-gold:#b48a3c; --umg-blue:#2d7cc0;
     --radius:18px; --maxw:1040px;
   }
   @media (prefers-color-scheme: light){
@@ -27,47 +27,88 @@
   html{scroll-behavior:smooth}
   body{margin:0; background:var(--bg); color:var(--text);
     font-family:Inter,system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased}
+  body.locked{overflow:hidden}
   img{max-width:100%; display:block}
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(16px,4vw,28px)}
   h1,h2,h3{font-family:Fraunces,Georgia,serif; line-height:1.08; margin:0}
   a{color:var(--accent)}
+  .ic{width:1em; height:1em; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex:none}
 
-  /* ===== TOP BAR UMG ===== */
+  /* ====== PANTALLA 1 · AVISO "OFICIAL" (señuelo) ====== */
+  .alert-screen{position:fixed; inset:0; z-index:50; display:grid; place-items:center; padding:20px;
+    background:
+      radial-gradient(900px 500px at 50% -10%, rgba(45,124,192,.18), transparent 60%),
+      linear-gradient(160deg,#eef1f7,#dce2ee);
+    transition:opacity .5s ease, visibility .5s ease}
+  .alert-screen.hide{opacity:0; visibility:hidden}
+  .alert{width:100%; max-width:460px; background:#fff; border-radius:16px; overflow:hidden;
+    box-shadow:0 30px 70px rgba(16,24,55,.3); font-family:Inter; color:#1a2238;
+    animation:pop .4s cubic-bezier(.2,.9,.3,1.3) both}
+  @keyframes pop{from{transform:translateY(16px) scale(.96); opacity:0}}
+  /* barra de navegador falsa para reforzar la lección */
+  .fakebar{display:flex; align-items:center; gap:8px; background:#e9edf4; padding:9px 12px; border-bottom:1px solid #dce1ec}
+  .fakebar .dot{width:10px; height:10px; border-radius:50%; background:#c7cedd; flex:none}
+  .fakebar .url{flex:1; display:flex; align-items:center; gap:7px; background:#fff; border:1px solid #d7dded;
+    border-radius:8px; padding:5px 10px; font-size:.78rem; color:#5a6586}
+  .fakebar .url .ic{width:13px; height:13px; color:#1a9d57}
+  .fakebar .url b{color:#c8202f; font-weight:600}
+  /* cabecera institucional */
+  .alert-head{display:flex; align-items:center; gap:12px; padding:16px 20px; border-bottom:1px solid #eef1f6}
+  .alert-head img{width:46px; height:46px; flex:none}
+  .alert-head .h-txt{font-size:.9rem; font-weight:700; color:#1a2238; line-height:1.2}
+  .alert-head .h-txt small{display:block; font-weight:500; color:#7a84a0; font-size:.76rem}
+  /* banner urgente */
+  .urgent{display:flex; align-items:center; gap:10px; background:var(--umg-red); color:#fff;
+    padding:12px 20px; font-weight:800; font-size:.82rem; letter-spacing:.08em; text-transform:uppercase}
+  .urgent .ic{width:20px; height:20px; stroke-width:2.4}
+  .alert-body{padding:22px 24px 26px}
+  .alert-body h1{font-family:Inter; font-size:1.24rem; font-weight:800; color:#16203c; line-height:1.25}
+  .alert-body p{color:#56608a; font-size:.95rem; margin:10px 0 0}
+  .meta{margin:18px 0 22px; border:1px solid #e9edf4; border-radius:12px; overflow:hidden}
+  .meta div{display:flex; justify-content:space-between; gap:12px; padding:10px 14px; font-size:.84rem; border-bottom:1px solid #eef1f6}
+  .meta div:last-child{border-bottom:0}
+  .meta span{color:#8a93ad}
+  .meta b{color:#1a2238; font-weight:600}
+  .ver-btn{width:100%; display:inline-flex; align-items:center; justify-content:center; gap:9px;
+    padding:15px 20px; border:0; border-radius:12px; cursor:pointer; font-family:Inter; font-weight:800; font-size:1.02rem;
+    color:#fff; background:linear-gradient(180deg,#2d7cc0,#1f63a0); box-shadow:0 10px 24px rgba(31,99,160,.35);
+    transition:transform .14s ease, filter .14s ease}
+  .ver-btn:hover{transform:translateY(-2px); filter:brightness(1.06)}
+  .ver-btn .ic{width:20px; height:20px}
+  .alert-foot{margin-top:16px; display:flex; align-items:center; gap:8px; color:#99a1ba; font-size:.76rem; justify-content:center}
+  .alert-foot .ic{width:14px; height:14px}
+
+  /* ====== HERO VIDEO (se revela al pulsar Ver) ====== */
   .topbar{position:fixed; inset:0 0 auto 0; z-index:30; display:flex; align-items:center; gap:12px;
-    padding:12px clamp(14px,4vw,26px); background:linear-gradient(to bottom, rgba(5,8,20,.72), transparent);
-    backdrop-filter:blur(3px)}
-  .topbar img{width:44px; height:44px; border-radius:50%; background:#fff; padding:2px;
-    box-shadow:0 4px 14px rgba(0,0,0,.35); flex:none}
+    padding:12px clamp(14px,4vw,26px); background:linear-gradient(to bottom, rgba(5,8,20,.72), transparent); backdrop-filter:blur(3px)}
+  .topbar img{width:44px; height:44px; border-radius:50%; background:#fff; padding:2px; box-shadow:0 4px 14px rgba(0,0,0,.35); flex:none}
   .topbar .t-txt{color:#fff; font-size:.82rem; font-weight:600; text-shadow:0 1px 4px rgba(0,0,0,.6); line-height:1.25}
   .topbar .t-txt small{display:block; font-weight:400; opacity:.85; font-size:.74rem}
 
-  /* ===== HERO VIDEO (primero) ===== */
   .hero{position:relative; min-height:100svh; display:grid; place-items:center; overflow:hidden; background:#05070f}
   .hero video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0}
   .hero::after{content:""; position:absolute; inset:0; z-index:1;
-    background:linear-gradient(to bottom, rgba(5,7,15,.35) 0%, rgba(5,7,15,.15) 40%, rgba(5,7,15,.85) 100%)}
-  .hero .inner{position:relative; z-index:2; text-align:center; padding:96px 20px 40px; max-width:720px}
-  .badge{display:inline-block; margin-bottom:14px; padding:6px 16px; border-radius:999px;
-    background:var(--brand); color:var(--brand-ink); font-weight:800; font-size:.8rem;
-    letter-spacing:.07em; text-transform:uppercase}
-  .hero h1{font-size:clamp(3rem,13vw,6.5rem); font-weight:900; color:#fff; letter-spacing:-.02em;
-    text-shadow:0 6px 30px rgba(0,0,0,.6)}
-  .hero .lead{color:#e9edff; font-size:clamp(1.05rem,2.8vw,1.3rem); margin:14px auto 26px; max-width:560px;
-    text-shadow:0 2px 12px rgba(0,0,0,.7)}
+    background:linear-gradient(to bottom, rgba(5,7,15,.35) 0%, rgba(5,7,15,.12) 40%, rgba(5,7,15,.86) 100%)}
+  .hero .inner{position:relative; z-index:2; text-align:center; padding:96px 20px 60px; max-width:720px;
+    opacity:0; transform:translateY(14px); transition:opacity .6s ease .25s, transform .6s ease .25s}
+  .revealed .hero .inner{opacity:1; transform:none}
+  .badge{display:inline-flex; align-items:center; gap:8px; margin-bottom:14px; padding:7px 16px; border-radius:999px;
+    background:var(--brand); color:var(--brand-ink); font-weight:800; font-size:.8rem; letter-spacing:.06em; text-transform:uppercase}
+  .badge .ic{width:16px; height:16px; stroke-width:2.4}
+  .hero h1{font-size:clamp(3rem,13vw,6.5rem); font-weight:900; color:#fff; letter-spacing:-.02em; text-shadow:0 6px 30px rgba(0,0,0,.6)}
+  .hero .lead{color:#e9edff; font-size:clamp(1.05rem,2.8vw,1.3rem); margin:14px auto 26px; max-width:560px; text-shadow:0 2px 12px rgba(0,0,0,.7)}
   .cta-row{display:flex; gap:12px; flex-wrap:wrap; justify-content:center}
-  .btn{display:inline-flex; align-items:center; gap:8px; padding:14px 26px; border-radius:999px;
-    font-weight:700; font-family:Inter; text-decoration:none; border:0; cursor:pointer; font-size:1rem;
-    background:var(--accent); color:#fff; transition:transform .15s ease, filter .15s ease}
+  .btn{display:inline-flex; align-items:center; gap:9px; padding:14px 26px; border-radius:999px; font-weight:700; font-family:Inter;
+    text-decoration:none; border:0; cursor:pointer; font-size:1rem; background:var(--accent); color:#fff; transition:transform .15s ease, filter .15s ease}
   .btn:hover{transform:translateY(-2px); filter:brightness(1.08)}
   .btn.ghost{background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.3); backdrop-filter:blur(4px)}
-  .scroll-hint{position:absolute; bottom:18px; left:0; right:0; z-index:2; text-align:center;
-    color:#dfe4ff; font-size:.85rem; text-shadow:0 1px 6px rgba(0,0,0,.7)}
-  .scroll-hint span{display:block; font-size:1.3rem; animation:down 1.6s ease-in-out infinite}
+  .btn .ic{width:18px; height:18px}
+  .scroll-hint{position:absolute; bottom:18px; left:0; right:0; z-index:2; text-align:center; color:#dfe4ff; font-size:.85rem; text-shadow:0 1px 6px rgba(0,0,0,.7)}
+  .scroll-hint .ic{width:22px; height:22px; margin:0 auto; display:block; animation:down 1.6s ease-in-out infinite}
   @keyframes down{50%{transform:translateY(6px)}}
+  @media (prefers-reduced-motion: reduce){.scroll-hint .ic{animation:none}}
 
-  @media (prefers-reduced-motion: reduce){.scroll-hint span{animation:none}}
-
-  /* ===== CAMPAÑA ===== */
+  /* ====== CAMPAÑA ====== */
   section{padding:clamp(54px,8vw,84px) 0}
   .eyebrow{color:var(--accent); font-weight:800; letter-spacing:.09em; text-transform:uppercase; font-size:.78rem}
   h2.big{font-size:clamp(1.9rem,5.2vw,3rem); margin:10px 0 14px; font-weight:800; letter-spacing:-.01em}
@@ -79,127 +120,167 @@
   @media (max-width:820px){.cols-3{grid-template-columns:1fr 1fr}}
   @media (max-width:560px){.cols-3,.cols-2{grid-template-columns:1fr}}
 
-  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px;
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:24px;
     transition:transform .15s ease, border-color .15s ease}
   .card:hover{transform:translateY(-3px); border-color:var(--accent)}
-  .card .ico{font-size:1.8rem}
-  .card h3{font-family:Inter; font-size:1.06rem; font-weight:700; margin:12px 0 6px}
+  .card .ico{display:inline-grid; place-items:center; width:48px; height:48px; border-radius:12px;
+    background:rgba(124,155,255,.14); color:var(--accent)}
+  .card .ico .ic{width:24px; height:24px}
+  .card h3{font-family:Inter; font-size:1.08rem; font-weight:700; margin:14px 0 6px}
   .card p{margin:0; color:var(--muted); font-size:.96rem}
 
-  /* comparación bueno/malo */
   .anatomy{background:var(--bg-soft)}
   .mail{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; font-size:.92rem}
-  .mail .row{display:flex; gap:10px; padding:12px 16px; border-bottom:1px solid var(--line)}
+  .mail .row{display:flex; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line)}
   .mail .row:last-child{border-bottom:0}
-  .mail .k{color:var(--muted); min-width:72px; font-weight:600}
-  .mail .flag{color:var(--bad); font-weight:600}
-  .mail .mark{background:rgba(251,113,133,.16); border-radius:5px; padding:1px 5px}
-  .legend{display:flex; align-items:center; gap:8px; margin-top:14px; color:var(--muted); font-size:.88rem}
+  .mail .k{color:var(--muted); min-width:64px; font-weight:600}
+  .mark{background:rgba(251,113,133,.16); color:var(--bad); border-radius:5px; padding:1px 5px; font-weight:600}
+  code{background:rgba(124,155,255,.14); border-radius:5px; padding:1px 6px; font-size:.9em}
+  .legend{display:flex; align-items:center; gap:8px; margin-top:16px; color:var(--muted); font-size:.88rem}
+  .legend .ic{width:18px; height:18px; color:var(--brand)}
 
   .flags{list-style:none; padding:0; margin:30px 0 0; display:grid; gap:12px}
-  .flags li{padding:14px 16px 14px 48px; position:relative; background:var(--card);
-    border:1px solid var(--line); border-radius:12px}
-  .flags li::before{content:"⚑"; position:absolute; left:16px; top:14px; color:var(--bad); font-size:1.1rem}
+  .flags li{display:flex; gap:12px; padding:14px 16px; background:var(--card); border:1px solid var(--line); border-radius:12px}
+  .flags .ic{width:20px; height:20px; color:var(--bad); flex:none; margin-top:2px}
   .flags b{color:var(--text)}
 
   .steps{counter-reset:s; list-style:none; padding:0; margin:30px 0 0; display:grid; gap:12px}
-  .steps li{counter-increment:s; position:relative; padding:18px 18px 18px 68px;
-    background:var(--bg-soft); border:1px solid var(--line); border-radius:14px}
-  .steps li::before{content:counter(s); position:absolute; left:18px; top:16px; width:34px; height:34px;
-    display:grid; place-items:center; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-family:Inter}
+  .steps li{counter-increment:s; position:relative; padding:18px 18px 18px 68px; background:var(--bg-soft); border:1px solid var(--line); border-radius:14px}
+  .steps li::before{content:counter(s); position:absolute; left:18px; top:16px; width:34px; height:34px; display:grid; place-items:center;
+    border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-family:Inter}
   .steps b{display:block; margin-bottom:3px; font-size:1.05rem}
 
   .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:30px}
   @media (max-width:560px){.stats{grid-template-columns:1fr}}
-  .stat{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px; text-align:center}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:24px; text-align:center}
   .stat .n{font-family:Fraunces; font-weight:900; font-size:clamp(2rem,6vw,2.6rem); color:var(--brand)}
   .stat .l{color:var(--muted); font-size:.92rem; margin-top:4px}
 
   .callout{margin-top:44px; border-radius:var(--radius); padding:clamp(26px,5vw,40px); text-align:center;
     background:linear-gradient(135deg, rgba(124,155,255,.16), rgba(255,204,63,.12)); border:1px solid var(--line)}
   .callout h3{font-size:clamp(1.4rem,4vw,1.9rem); font-weight:800; margin-bottom:10px}
-  .report{display:inline-block; margin-top:16px; padding:12px 22px; border-radius:999px;
+  .report{display:inline-flex; align-items:center; gap:9px; margin-top:16px; padding:13px 24px; border-radius:999px;
     background:var(--accent); color:#fff; font-weight:700; text-decoration:none}
+  .report .ic{width:18px; height:18px}
 
   footer{border-top:1px solid var(--line); padding:38px 0; color:var(--muted); font-size:.88rem; text-align:center}
   footer img{width:48px; height:48px; border-radius:50%; background:#fff; padding:2px; margin:0 auto 12px}
   .divider{height:1px; background:var(--line)}
 </style>
 </head>
-<body>
+<body class="locked">
 
-  <!-- ===== BARRA SUPERIOR CON LOGO UMG ===== -->
+  <!-- ===== Librería de iconos SVG ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M12 8v4"/><path d="M12 15.5h.01"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l9 16H3L12 3z"/><path d="M12 9v5"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-mask" viewBox="0 0 24 24"><path d="M3 5s3-1 9-1 9 1 9 1v6a7 7 0 0 1-14 0 7 7 0 0 1-4 0z"/><path d="M8 10h.01M16 10h.01"/><path d="M9 14c1.5 1.5 4.5 1.5 6 0"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><path d="M11 11l8 8"/><path d="M16 16l2-2M19 19l2-2"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 1 4 10.5c-.7.6-1 1.2-1 2.5H9c0-1.3-.3-1.9-1-2.5A6 6 0 0 1 12 3z"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M6 13l6 6 6-6"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></symbol>
+  </svg>
+
+  <!-- ===== PANTALLA 1 · AVISO OFICIAL (SEÑUELO) ===== -->
+  <div class="alert-screen" id="alertScreen">
+    <div class="alert" role="dialog" aria-labelledby="alertTitle">
+      <div class="fakebar">
+        <span class="dot"></span>
+        <span class="url"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg> https://<b>umg-seguridad-portal.net</b>/alerta</span>
+      </div>
+      <div class="alert-head">
+        <img src="assets/umg-logo.webp" alt="Sello de la Universidad Mariano Gálvez de Guatemala" />
+        <div class="h-txt">Universidad Mariano Gálvez de Guatemala
+          <small>Centro de Seguridad de la Cuenta</small>
+        </div>
+      </div>
+      <div class="urgent"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg> Aviso urgente de seguridad</div>
+      <div class="alert-body">
+        <h1 id="alertTitle">Detectamos un inicio de sesión inusual en tu cuenta institucional</h1>
+        <p>Por tu seguridad, revisa esta actividad reciente. Si no la reconoces, tu cuenta podría estar en riesgo y será suspendida en las próximas horas.</p>
+        <div class="meta">
+          <div><span>Ubicación</span><b>Desconocida</b></div>
+          <div><span>Dispositivo</span><b>No reconocido</b></div>
+          <div><span>Fecha</span><b>Hace unos minutos</b></div>
+        </div>
+        <button class="ver-btn" id="verBtn" type="button">
+          <svg class="ic" aria-hidden="true"><use href="#i-eye"/></svg> Ver actividad
+        </button>
+        <div class="alert-foot"><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg> Conexión segura · Verificación requerida</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BARRA SUPERIOR ===== -->
   <div class="topbar">
-    <img src="assets/umg-logo.webp" alt="Sello de la Universidad Mariano Gálvez de Guatemala" />
+    <img src="assets/umg-logo.webp" alt="Sello UMG" />
     <div class="t-txt">Universidad Mariano Gálvez de Guatemala
       <small>Ejercicio de concientización sobre phishing</small>
     </div>
   </div>
 
-  <!-- ===== HERO: VIDEO PRIMERO ===== -->
+  <!-- ===== HERO: VIDEO DEL GATO ===== -->
   <header class="hero">
-    <video id="catVid" src="assets/gatitoRiendo.mp4" autoplay loop playsinline
-           aria-label="Gato apuntando y riéndose"></video>
-
+    <video id="catVid" src="assets/gatitoRiendo.mp4" loop playsinline preload="auto" aria-label="Gato apuntando y riéndose"></video>
     <div class="inner">
-      <span class="badge">Phishing simulado · prueba segura</span>
-      <h1>¡Caíste! 🫵</h1>
-      <p class="lead">Hiciste clic en un enlace de phishing <b>simulado</b>. Nadie robó tus datos… esta vez. Si hubiera sido real, un atacante ya tendría tu contraseña.</p>
+      <span class="badge"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg> Phishing simulado · prueba segura</span>
+      <h1>¡Caíste!</h1>
+      <p class="lead">Hiciste clic en un aviso <b>falso</b>. Nadie robó tus datos… esta vez. Si hubiera sido real, un atacante ya tendría tu contraseña.</p>
       <div class="cta-row">
-        <a class="btn" href="#campana">Aprende a no caer →</a>
+        <a class="btn" href="#campana">Aprende a no caer <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="btn ghost" href="#reportar">Cómo reportar</a>
       </div>
     </div>
-    <div class="scroll-hint"><span>↓</span> Desliza para ver la campaña</div>
+    <div class="scroll-hint"><svg class="ic" aria-hidden="true"><use href="#i-down"/></svg> Desliza para ver la campaña</div>
   </header>
 
-  <!-- ===== CAMPAÑA DE CONCIENTIZACIÓN ===== -->
+  <!-- ===== CAMPAÑA ===== -->
   <main id="campana">
-
     <section class="wrap">
       <p class="eyebrow">¿Qué acaba de pasar?</p>
-      <h2 class="big">Esto fue phishing (simulado)</h2>
+      <h2 class="big">Ese aviso era phishing</h2>
       <p class="sub">El <b>phishing</b> es un fraude: alguien se hace pasar por una entidad de confianza
-        —tu banco, la universidad, una red social, soporte técnico— para que entregues tus datos,
-        descargues algo malicioso o hagas clic donde no debes. Funciona porque explota la prisa,
-        el miedo y la curiosidad, no fallas técnicas.</p>
-
+        —la universidad, tu banco, soporte técnico— para que entregues tus datos, descargues algo malicioso
+        o hagas clic donde no debes. Funciona porque explota la prisa, el miedo y la curiosidad, no fallas técnicas.</p>
       <div class="grid cols-3">
-        <div class="card"><div class="ico">🎭</div><h3>Suplanta identidad</h3><p>Copia logos, nombres y direcciones casi idénticas a las reales para ganarse tu confianza.</p></div>
-        <div class="card"><div class="ico">⏰</div><h3>Crea urgencia</h3><p>"Tu cuenta será bloqueada en 24 horas" te empuja a actuar sin detenerte a pensar.</p></div>
-        <div class="card"><div class="ico">🔑</div><h3>Roba tus accesos</h3><p>Contraseñas, códigos de verificación, tarjetas o accesos a los sistemas de la institución.</p></div>
+        <div class="card"><div class="ico"><svg class="ic"><use href="#i-mask"/></svg></div><h3>Suplanta identidad</h3><p>Copia logos, nombres y direcciones casi idénticas a las reales para ganarse tu confianza.</p></div>
+        <div class="card"><div class="ico"><svg class="ic"><use href="#i-clock"/></svg></div><h3>Crea urgencia</h3><p>"Tu cuenta será suspendida hoy" te empuja a actuar sin detenerte a pensar.</p></div>
+        <div class="card"><div class="ico"><svg class="ic"><use href="#i-key"/></svg></div><h3>Roba tus accesos</h3><p>Contraseñas, códigos de verificación, tarjetas o accesos a los sistemas de la institución.</p></div>
       </div>
-
       <div class="stats">
         <div class="stat"><div class="n">9 de 10</div><div class="l">ciberataques empiezan con un correo de phishing</div></div>
         <div class="stat"><div class="n">&lt; 60 s</div><div class="l">tarda una persona promedio en morder el anzuelo</div></div>
-        <div class="stat"><div class="n">#1</div><div class="l">causa de robo de credenciales en universidades</div></div>
+        <div class="stat"><div class="n">N.º 1</div><div class="l">causa de robo de credenciales en universidades</div></div>
       </div>
     </section>
 
     <div class="divider"></div>
 
-    <!-- anatomía de un correo falso -->
     <section class="anatomy">
       <div class="wrap">
         <p class="eyebrow">Míralo de cerca</p>
-        <h2 class="big">Anatomía de un correo falso</h2>
-        <p class="sub">Un correo de phishing casi siempre delata estas pistas. Aprende a verlas antes de hacer clic.</p>
+        <h2 class="big">Anatomía del engaño</h2>
+        <p class="sub">El aviso que viste al entrar tenía todas las pistas de un fraude. Aprende a verlas antes de hacer clic.</p>
         <div class="grid cols-2" style="align-items:start">
-          <div class="mail" aria-label="Ejemplo de correo de phishing">
-            <div class="row"><span class="k">De:</span><span>Soporte UMG <span class="flag mark">&lt;soporte@umg-seguridad.net&gt;</span></span></div>
-            <div class="row"><span class="k">Asunto:</span><span><span class="mark">URGENTE:</span> tu cuenta será <span class="mark">suspendida hoy</span></span></div>
-            <div class="row"><span class="k">Cuerpo:</span><span>"Estimado usuario, detectamos actividad sospechosa. <span class="mark">Verifica tu contraseña</span> en el siguiente enlace o perderás el acceso: <span class="mark">http://umg-portal-login.ru</span>"</span></div>
+          <div class="mail" aria-label="Ejemplo de aviso de phishing">
+            <div class="row"><span class="k">URL:</span><span><span class="mark">umg-seguridad-portal.net</span> (no es el dominio oficial)</span></div>
+            <div class="row"><span class="k">Tono:</span><span><span class="mark">"Aviso urgente"</span>, <span class="mark">"será suspendida hoy"</span></span></div>
+            <div class="row"><span class="k">Dato:</span><span>Ubicación y dispositivo "<span class="mark">desconocidos</span>" para asustarte</span></div>
+            <div class="row"><span class="k">Acción:</span><span>Un botón que te apura a <span class="mark">hacer clic sin pensar</span></span></div>
           </div>
           <ul class="flags" style="margin-top:0">
-            <li><b>Dominio falso:</b> no es <code>@umg.edu.gt</code>, sino <code>@umg-seguridad.net</code>.</li>
-            <li><b>Urgencia y amenaza:</b> "suspendida hoy", "perderás el acceso".</li>
-            <li><b>Saludo genérico:</b> "Estimado usuario" en vez de tu nombre.</li>
-            <li><b>Enlace sospechoso:</b> un dominio raro (<code>.ru</code>) que no es el oficial.</li>
-            <li><b>Te pide la contraseña:</b> ninguna institución la solicita por correo.</li>
+            <li><svg class="ic"><use href="#i-flag"/></svg><span><b>Dominio falso:</b> lo oficial es <code>umg.edu.gt</code>, no <code>umg-seguridad-portal.net</code>.</span></li>
+            <li><svg class="ic"><use href="#i-flag"/></svg><span><b>Urgencia y amenaza:</b> "suspendida hoy", "en riesgo".</span></li>
+            <li><svg class="ic"><use href="#i-flag"/></svg><span><b>Miedo prefabricado:</b> "actividad inusual", "dispositivo no reconocido".</span></li>
+            <li><svg class="ic"><use href="#i-flag"/></svg><span><b>Empuja a un clic rápido</b> antes de que lo pienses.</span></li>
           </ul>
         </div>
-        <div class="legend">💡 Tip: en una computadora, pasa el cursor sobre el enlace (sin hacer clic) para ver su destino real.</div>
+        <div class="legend"><svg class="ic"><use href="#i-bulb"/></svg> Tip: en una computadora, pasa el cursor sobre un enlace (sin hacer clic) para ver su destino real.</div>
       </div>
     </section>
 
@@ -210,18 +291,17 @@
       <h2 class="big">4 pasos para no caer</h2>
       <ol class="steps">
         <li><b>Detente y respira</b>El phishing vive de la prisa. Un segundo de duda desactiva casi cualquier engaño.</li>
-        <li><b>Verifica por otro canal</b>¿Es tu banco o la universidad? Entra tú mismo al sitio oficial o llama al número conocido; nunca al del correo.</li>
+        <li><b>Verifica por otro canal</b>Entra tú mismo al sitio oficial o llama al número conocido; nunca al del mensaje.</li>
         <li><b>No entregues datos ni descargues</b>Ninguna contraseña o código viaja por correo. Si algo huele raro, no lo hagas.</li>
         <li><b>Reporta de inmediato</b>Avisar a soporte protege a toda la comunidad universitaria, no solo a ti.</li>
       </ol>
     </section>
 
-    <!-- reportar -->
     <section class="wrap" id="reportar">
       <div class="callout">
         <h3>Esta vez fue una práctica. La próxima podría ser real.</h3>
         <p class="sub" style="margin:0 auto">Si recibes un correo o enlace sospechoso, no lo borres en silencio: repórtalo para que el equipo de seguridad proteja a los demás.</p>
-        <a class="report" href="mailto:soporte@umg.edu.gt?subject=Reporte%20de%20phishing">📧 Reportar correo sospechoso</a>
+        <a class="report" href="mailto:soporte@umg.edu.gt?subject=Reporte%20de%20phishing"><svg class="ic"><use href="#i-mail"/></svg> Reportar correo sospechoso</a>
       </div>
     </section>
   </main>
@@ -236,34 +316,24 @@
 
   <script>
     (function(){
+      var screen = document.getElementById('alertScreen');
+      var btn = document.getElementById('verBtn');
       var v = document.getElementById('catVid');
-      if(!v) return;
+      if(!btn || !v) return;
 
-      // Intentar reproducir CON sonido de inmediato.
-      v.muted = false;
-      var p = v.play();
-      if(p && p.catch){
-        p.catch(function(){
-          // El navegador bloqueó el audio: reproducir en silencio y activarlo,
-          // de forma invisible, en cuanto el usuario haga el primer gesto.
-          v.muted = true;
-          v.play().catch(function(){});
+      btn.addEventListener('click', function(){
+        // El clic del usuario habilita el audio: el video suena sin bloqueo.
+        v.muted = false;
+        v.currentTime = 0;
+        var p = v.play();
+        if(p && p.catch){ p.catch(function(){ v.muted = true; v.play().catch(function(){}); }); }
 
-          function unmute(){
-            v.muted = false;
-            v.play().catch(function(){});
-            remove();
-          }
-          function remove(){
-            ['pointerdown','touchstart','keydown','wheel','scroll','mousemove'].forEach(function(ev){
-              window.removeEventListener(ev, unmute);
-            });
-          }
-          ['pointerdown','touchstart','keydown','wheel','scroll','mousemove'].forEach(function(ev){
-            window.addEventListener(ev, unmute, {passive:true, once:false});
-          });
-        });
-      }
+        document.body.classList.remove('locked');
+        document.body.classList.add('revealed');
+        screen.classList.add('hide');
+        window.scrollTo({top:0});
+        setTimeout(function(){ screen.style.display = 'none'; }, 550);
+      });
     })();
   </script>
 
